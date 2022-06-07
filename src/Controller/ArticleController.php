@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,6 +49,21 @@ class ArticleController extends AbstractController
     );
     }
 
+
+    /**
+     * @Route("/article/modifier/{id}",name="app_article_update", requirements={"id="\d+"})
+     */
+    public function update(Article $article, Request $request, EntityManagerInterface $em){
+        // creation du formulaire
+        $articleForm = $this->createForm(ArticleType::class, $article);
+        $articleForm->handleRequest($request);
+        if($articleForm->isSubmitted) {
+            $em->flush();
+            return $this
+        }
+
+        return $this->render("article/modifier.html.twig");
+    }
 
 
 
