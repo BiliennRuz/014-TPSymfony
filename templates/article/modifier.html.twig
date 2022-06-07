@@ -1,12 +1,16 @@
 {% extends "layouts/base.html.twig" %}
 
 {% block titre %}
-   modifier articles
+
+Modifier un article
+
 {% endblock %}
 
 {% block main %}
 
-<h1 class="text-center mt-5" >Modification articles</h1>
+
+<h1 class="text-center mt-5" >Modifier un artcile</h1>
+
 
 <div class="row mt-5">
     <div class="col-6 offset-3">
@@ -14,7 +18,8 @@
             {{ form_row(articleForm.name) }}
             {{ form_row(articleForm.description) }}
             {{ form_row(articleForm.price) }}
-            <button type="submit" class="btn btn-primary">Modifier</button>
+            <button type="submit" class="btn btn-primary" >Modifier</button>
+
         {{ form_end(articleForm) }}
     </div>
 </div>

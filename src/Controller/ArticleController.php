@@ -17,10 +17,9 @@ class ArticleController extends AbstractController
 
 
     /**
-     *@Route("/article/ajouter",name="app_article_ajouter")
+     *@Route("/article/ajouter",name="app_ajouterartilce")
      */
-    public function addArticle(Request $request,ArticleRepository $repo){
-
+    public function addArticle(Request $request,ArticleRepository $repo){        
         // création instance article
         $article = new Article();
         // creation du formulaire
@@ -29,14 +28,34 @@ class ArticleController extends AbstractController
         // recup 
         $articleForm->handleRequest($request);
 
-        if($articleForm->isSubmitted() ){
+        if($articleForm->isSubmitted()){
             $repo->add($article,true);
+            $this->addFlash("success","l'article à bien été créé");
+            return $this->redirectToRoute("app_listearticle");
         }
 
         return $this->render("article/ajouter.html.twig",
             ["articleForm"=>$articleForm->createView()]
         );
     }
+
+
+    /**
+     *  @Route("/article/modifier/{id}",  name="app_article_update",requirements={"id"="\d+"})
+     */
+    public function update(Article $article,Request $request,EntityManagerInterface $em){
+        // creation du formulaire
+        $articleForm = $this->createForm(ArticleType::class,$article);
+        $articleForm->handleRequest($request);
+        if($articleForm->isSubmitted()){
+            $em->flush();
+            // ajouter un message
+            $this->addFlash("success","l'article à bien été modifié");
+            return $this->redirectToRoute("app_listearticle");
+        }
+        return $this->render("article/modifier.html.twig",["articleForm"=>$articleForm->createView()]);
+    }
+
 
     /**
      * @Route("/article/liste",name="app_listearticle")
@@ -51,21 +70,15 @@ class ArticleController extends AbstractController
 
 
     /**
-     * @Route("/article/modifier/{id}",name="app_article_update", requirements={"id="\d+"})
+     * @Route("/article/supprimer/{id}", name="app_article_remove",requirements={"id"="\d+"})
      */
-    public function update(Article $article, Request $request, EntityManagerInterface $em){
-        // creation du formulaire
-        $articleForm = $this->createForm(ArticleType::class, $article);
-        $articleForm->handleRequest($request);
-        if($articleForm->isSubmitted) {
-            $em->flush();
-            return $this
+    public function remove(ArticleRepository $repo,$id=null){
+        if($id!=null){
+            $article = $repo->find($id);
+            $repo->remove($article,true);
         }
-
-        return $this->render("article/modifier.html.twig");
+        return $this->redirectToRoute("app_listearticle");
     }
-
-
 
 
 
