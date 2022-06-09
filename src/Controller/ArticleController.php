@@ -7,6 +7,7 @@ use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -19,7 +20,11 @@ class ArticleController extends AbstractController
     /**
      *@Route("/article/ajouter",name="app_ajouterarticle")
      */
-    public function addArticle(Request $request,ArticleRepository $repo){        
+    public function addArticle(Request $request,ArticleRepository $repo){    
+                // check if is connected else redirect to login
+                if($this->getUser()==null){
+                    return $this->redirectToRoute("app_login");
+                }        
         // création instance article
         $article = new Article();
         // creation du formulaire
@@ -70,6 +75,7 @@ class ArticleController extends AbstractController
 
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/article/supprimer/{id}", name="app_article_remove",requirements={"id"="\d+"})
      */
     public function remove(ArticleRepository $repo,$id=null){
