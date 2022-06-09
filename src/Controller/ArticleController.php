@@ -17,7 +17,7 @@ class ArticleController extends AbstractController
 
 
     /**
-     *@Route("/article/ajouter",name="app_ajouterartilce")
+     *@Route("/article/ajouter",name="app_ajouterarticle")
      */
     public function addArticle(Request $request,ArticleRepository $repo){        
         // création instance article
