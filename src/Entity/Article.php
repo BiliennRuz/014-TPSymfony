@@ -42,12 +42,6 @@ class Article
      */
     private $price;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=Utilisateur::class, inversedBy="articles")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $Owner;
-
     public function getId(): ?int
     {        
         return $this->id;
@@ -89,15 +83,4 @@ class Article
         return $this;
     }
 
-    public function getOwner(): ?Utilisateur
-    {
-        return $this->Owner;
-    }
-
-    public function setOwner(?Utilisateur $Owner): self
-    {
-        $this->Owner = $Owner;
-
-        return $this;
-    }
 }

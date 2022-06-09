@@ -18,11 +18,7 @@ class ArticleType extends AbstractType
         $builder
             ->add('name',TextType::class,["label"=>"Nom","required"=>false])
             ->add('description',TextareaType::class)
-            ->add('price',NumberType::class,["label"=>"Prix"])  
-            ->add('Owner',EntityType::class,[
-                "class"=>Utilisateur::class,
-                "choise_label"=>"nom"
-            ])  
+            ->add('price',NumberType::class,["label"=>"Prix"])   
         ;
         
     }
