@@ -7,6 +7,7 @@ use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,9 +18,19 @@ class ArticleController extends AbstractController
 
 
     /**
+     * @IsGranted("ROLE_USER")
      *@Route("/article/ajouter",name="app_ajouterartilce")
      */
-    public function addArticle(Request $request,ArticleRepository $repo){        
+    public function addArticle(Request $request,ArticleRepository $repo){    
+
+
+        ///if($this->getUser()!=null)
+
+        // check if is connected else redirect to login
+        // if(!$this->isGranted("ROLE_USER")){
+        //     return $this->redirectToRoute("app_connexion");
+        // }        
+
         // création instance article
         $article = new Article();
         // creation du formulaire
@@ -41,9 +52,14 @@ class ArticleController extends AbstractController
 
 
     /**
+     *  @IsGranted("ROLE_ADMIN")
      *  @Route("/article/modifier/{id}",  name="app_article_update",requirements={"id"="\d+"})
      */
     public function update(Article $article,Request $request,EntityManagerInterface $em){
+        // check if is connected else redirect to login
+        // if(!$this->isGranted("ROLE_ADMIN")){
+        //     return $this->redirectToRoute("app_ajouterartilce");
+        // }           
         // creation du formulaire
         $articleForm = $this->createForm(ArticleType::class,$article);
         $articleForm->handleRequest($request);
@@ -61,18 +77,25 @@ class ArticleController extends AbstractController
      * @Route("/article/liste",name="app_listearticle")
      */
     public function list(ArticleRepository $repo){
+        
+        $artilces = $repo->joinArticleUtilisateur();
         return $this->render("article/list.html.twig",
         [
-            "articles"=>$repo->findAll()
+            "articles"=>$artilces
         ]
     );
     }
 
 
     /**
+     * @IsGranted("ROLE_ADMIN")
      * @Route("/article/supprimer/{id}", name="app_article_remove",requirements={"id"="\d+"})
      */
     public function remove(ArticleRepository $repo,$id=null){
+        // check if is connected else redirect to login
+        // if(!$this->isGranted("ROLE_ADMIN")){
+        //     return $this->redirectToRoute("app_ajouterartilce");
+        // }        
         if($id!=null){
             $article = $repo->find($id);
             $repo->remove($article,true);
