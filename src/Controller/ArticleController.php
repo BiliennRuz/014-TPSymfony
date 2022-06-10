@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
+use App\Service\Fonctions;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -16,6 +17,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArticleController extends AbstractController
 {
 
+    private $fonctions;
+
+    public function __construct(Fonctions $fonctions)
+    {
+        $this->fonctions = $fonctions;
+    }
 
     /**
      *@Route("/article/ajouter",name="app_ajouterarticle")
@@ -65,7 +72,10 @@ class ArticleController extends AbstractController
     /**
      * @Route("/article/liste",name="app_listearticle")
      */
-    public function list(ArticleRepository $repo){
+    public function list(ArticleRepository $repo, Fonctions $fonctions){
+        
+        dump($fonctions->add(200,3));
+
         return $this->render("article/list.html.twig",
         [
             "articles"=>$repo->findAll()
