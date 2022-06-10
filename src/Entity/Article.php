@@ -24,7 +24,7 @@ class Article
      * @Assert\NotBlank(message="ce champs ne peut pas etre vide!")
      * @Assert\Length(
      *  min=3,
-     *  max=10,
+     *  max=200,
      *  minMessage="Trop court",
      *  maxMessage="Trop long"
      * )
@@ -41,6 +41,8 @@ class Article
      * @ORM\Column(type="float")
      */
     private $price;
+
+
 
     public function getId(): ?int
     {        
@@ -82,4 +84,5 @@ class Article
 
         return $this;
     }
+
 }
